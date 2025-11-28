@@ -1,4 +1,7 @@
-# Ignorar credenciais do Google
+# Ignora a pasta de build do Maven (que contém classes compiladas)
+/target/
+
+# Ignorar o arquivo de credenciais na pasta de recursos
 src/main/resources/credentials.json
 
 # Ignorar configurações sensíveis
