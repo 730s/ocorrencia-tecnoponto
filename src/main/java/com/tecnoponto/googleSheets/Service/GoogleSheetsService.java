@@ -10,7 +10,9 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.tecnoponto.googleSheets.Entities.Ocorrencia;
 import org.springframework.stereotype.Service;
 
-import java.io.FileInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
@@ -28,8 +30,22 @@ public class GoogleSheetsService {
         private Sheets getSheetsService() throws IOException, GeneralSecurityException {
                 NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 
+                String envCredentials = System.getenv("GOOGLE_CREDENTIALS_JSON");
+                InputStream credentialsStream;
+
+                if (envCredentials != null && !envCredentials.isEmpty()) {
+                        credentialsStream = new ByteArrayInputStream(envCredentials.getBytes(StandardCharsets.UTF_8));
+                } else {
+                        credentialsStream = getClass().getClassLoader().getResourceAsStream("credentials.json");
+                }
+
+                if (credentialsStream == null) {
+                        throw new IOException(
+                                        "Credentials not found in environment variable GOOGLE_CREDENTIALS_JSON or classpath credentials.json");
+                }
+
                 GoogleCredential credential = GoogleCredential
-                                .fromStream(getClass().getClassLoader().getResourceAsStream("credentials.json"))
+                                .fromStream(credentialsStream)
                                 .createScoped(Collections.singleton(SheetsScopes.SPREADSHEETS));
 
                 return new Sheets.Builder(httpTransport, JSON_FACTORY, credential)
@@ -39,8 +55,8 @@ public class GoogleSheetsService {
 
         public void adicionarOcorrencia(Ocorrencia ocorrencia) throws IOException, GeneralSecurityException {
 
-        Sheets sheetsService = getSheetsService();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+                Sheets sheetsService = getSheetsService();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
                 ValueRange body = new ValueRange().setValues(
                                 Collections.singletonList(
