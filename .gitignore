@@ -1,0 +1,5 @@
+# Ignorar credenciais do Google
+src/main/resources/credentials.json
+
+# Ignorar configurações sensíveis
+src/main/resources/application.properties
