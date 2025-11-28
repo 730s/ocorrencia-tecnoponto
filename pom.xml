@@ -111,6 +111,16 @@
 					</excludes>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <target>
+                        <image>registry.render.com/ocorrencia-tecnoponto-img</image>
+                    </target>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 
