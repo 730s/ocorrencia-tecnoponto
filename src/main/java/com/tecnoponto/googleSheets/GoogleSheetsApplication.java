@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class GoogleSheetsApplication {
 
 	public static void main(String[] args) {
+		System.setProperty("server.servlet.session.cookie.same-site", "none");
+		System.setProperty("server.servlet.session.cookie.secure", "true");
 		SpringApplication.run(GoogleSheetsApplication.class, args);
 	}
 
