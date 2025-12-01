@@ -6,6 +6,10 @@ import com.tecnoponto.googleSheets.Service.GoogleSheetsService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/ocorrencia")
@@ -30,6 +34,48 @@ public class OcorrenciaController {
             googleSheetsService.adicionarOcorrencia(ocorrencia);
 
             return "Ocorrência registrada com sucesso!";
+        } catch (Exception e) {
+            return "Erro: " + e.getMessage();
+        }
+    }
+
+    @GetMapping("/minhas")
+    public Object getMinhasOcorrencias(HttpSession session) {
+        try {
+            Responsavel responsavel = (Responsavel) session.getAttribute("responsavelAutenticado");
+
+            if (responsavel == null) {
+                return "Erro: usuário não autenticado!";
+            }
+
+            List<List<Object>> todasOcorrencias = googleSheetsService.getOcorrencias();
+            List<Map<String, String>> minhasOcorrencias = new ArrayList<>();
+
+            String nomeResponsavel = responsavel.name().replace("_", " ");
+
+            boolean isHeader = true;
+            for (List<Object> row : todasOcorrencias) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue;
+                }
+
+                if (row.size() > 4 && row.get(4).toString().equalsIgnoreCase(nomeResponsavel)) {
+                    Map<String, String> ocorrenciaMap = new HashMap<>();
+                    ocorrenciaMap.put("email", row.size() > 0 ? row.get(0).toString() : "");
+                    ocorrenciaMap.put("unidade", row.size() > 1 ? row.get(1).toString() : "");
+                    ocorrenciaMap.put("cnpj", row.size() > 2 ? row.get(2).toString() : "");
+                    ocorrenciaMap.put("data", row.size() > 3 ? row.get(3).toString() : "");
+                    ocorrenciaMap.put("responsavel", row.size() > 4 ? row.get(4).toString() : "");
+                    ocorrenciaMap.put("erro", row.size() > 5 ? row.get(5).toString() : "");
+                    ocorrenciaMap.put("status", row.size() > 6 ? row.get(6).toString() : "");
+                    ocorrenciaMap.put("prioridade", row.size() > 7 ? row.get(7).toString() : "");
+                    minhasOcorrencias.add(ocorrenciaMap);
+                }
+            }
+
+            return minhasOcorrencias;
+
         } catch (Exception e) {
             return "Erro: " + e.getMessage();
         }

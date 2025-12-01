@@ -75,4 +75,12 @@ public class GoogleSheetsService {
                                 .setValueInputOption("RAW")
                                 .execute();
         }
+
+        public java.util.List<java.util.List<Object>> getOcorrencias() throws IOException, GeneralSecurityException {
+                Sheets sheetsService = getSheetsService();
+                ValueRange response = sheetsService.spreadsheets().values()
+                                .get(SPREADSHEET_ID, "Erros de acesso!A:H")
+                                .execute();
+                return response.getValues();
+        }
 }
