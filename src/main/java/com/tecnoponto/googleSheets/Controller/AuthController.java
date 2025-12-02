@@ -5,6 +5,7 @@ import com.tecnoponto.googleSheets.Enums.Responsavel;
 import com.tecnoponto.googleSheets.Service.AuthService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,17 +19,17 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public String login(@RequestBody Usuario usuario, HttpSession session) {
+    public ResponseEntity<String> login(@RequestBody Usuario usuario, HttpSession session) {
 
         if (!authService.autenticar(usuario.getNome(), usuario.getSenha())) {
-            return "Usuário ou senha inválidos!";
+            return ResponseEntity.status(401).body("Usuário ou senha inválidos!");
         }
 
         Responsavel r = authService.getResponsavelPorUsuario(usuario.getNome());
 
         session.setAttribute("responsavelAutenticado", r);
 
-        return "Login realizado com sucesso!";
+        return ResponseEntity.ok("Login realizado com sucesso!");
     }
 
     @GetMapping("/usuario")

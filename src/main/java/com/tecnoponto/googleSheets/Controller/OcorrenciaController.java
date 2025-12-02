@@ -5,6 +5,7 @@ import com.tecnoponto.googleSheets.Enums.Responsavel;
 import com.tecnoponto.googleSheets.Service.GoogleSheetsService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.ArrayList;
@@ -22,21 +23,21 @@ public class OcorrenciaController {
     private GoogleSheetsService googleSheetsService;
 
     @PostMapping
-    public String criar(@RequestBody Ocorrencia ocorrencia, HttpSession session) {
+    public ResponseEntity<String> criar(@RequestBody Ocorrencia ocorrencia, HttpSession session) {
         try {
             Responsavel responsavel = (Responsavel) session.getAttribute("responsavelAutenticado");
 
             if (responsavel == null) {
-                return "Erro: usuário não autenticado!";
+                return ResponseEntity.status(401).body("Erro: usuário não autenticado!");
             }
 
             ocorrencia.setResponsavel(responsavel);
 
             googleSheetsService.adicionarOcorrencia(ocorrencia);
 
-            return "Ocorrência registrada com sucesso!";
+            return ResponseEntity.ok("Ocorrência registrada com sucesso!");
         } catch (Exception e) {
-            return "Erro: " + e.getMessage();
+            return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
         }
     }
 
