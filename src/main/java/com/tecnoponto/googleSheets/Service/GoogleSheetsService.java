@@ -64,7 +64,8 @@ public class GoogleSheetsService {
                                                                 ocorrencia.getEmailAcesso(),
                                                                 ocorrencia.getUnidadeDeNegocio(),
                                                                 ocorrencia.getCnpj(),
-                                                                ocorrencia.getDataCriacao().format(formatter),
+                                                                ocorrencia.getDataCriacao().minusHours(3)
+                                                                                .format(formatter),
                                                                 ocorrencia.getResponsavel().name().replace("_", " "),
                                                                 ocorrencia.getErro().name().replace("_", " "),
                                                                 ocorrencia.getStatus().name().replace("_", " "),
