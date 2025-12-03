@@ -2,7 +2,8 @@ package com.tecnoponto.googleSheets.Enums;
 
 public enum Status {
     EM_ABERTO,
-    AJUSTADO;
+    AJUSTADO,
+    DESENVOLVIMENTO;
 
     @com.fasterxml.jackson.annotation.JsonCreator
     public static Status fromString(String value) {
