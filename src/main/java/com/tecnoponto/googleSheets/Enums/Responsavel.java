@@ -14,6 +14,7 @@ public enum Responsavel {
     LUCAS_R,
     LUCAS_V,
     MURILO,
+    SAMUEL,
     THIAGO,
     LEONARDO_H;
 }
