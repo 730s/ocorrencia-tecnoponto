@@ -29,6 +29,7 @@ public class AuthService {
         USUARIO_MAP.put("murilo.clem", Responsavel.MURILO);
         USUARIO_MAP.put("thiago.silva", Responsavel.THIAGO);
         USUARIO_MAP.put("samuel.rodrigues", Responsavel.SAMUEL);
+        USUARIO_MAP.put("nicoly.leoleo", Responsavel.NICOLY);
     }
 
     public boolean autenticar(String nome, String senha) {
