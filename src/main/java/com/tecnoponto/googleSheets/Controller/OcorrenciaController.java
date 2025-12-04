@@ -82,4 +82,14 @@ public class OcorrenciaController {
             return "Erro: " + e.getMessage();
         }
     }
+
+    @GetMapping("/erros")
+    public ResponseEntity<List<String>> getErros() {
+        try {
+            List<String> erros = googleSheetsService.getUniqueErrors();
+            return ResponseEntity.ok(erros);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }
